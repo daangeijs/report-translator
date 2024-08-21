@@ -31,7 +31,8 @@ docker build -t translator:latest .
 #### Basic Usage
 
 ```bash
-docker run --rm --gpus all translator:latest --input-file /path/to/input.json --output-file /path/to/output.json
+docker run --rm --gpus all -v /path/to/local/input:/input -v /path/to/local/output:/output translator:latest --input-file /input/input.json --output-file /output/output.json
+
 ```
 
 This command will translate the reports in the specified JSON file using the CUDA backend, assuming the reports are in Dutch, and save the results to the output file. Adjust the --device and --input-language arguments as needed.
@@ -39,7 +40,8 @@ This command will translate the reports in the specified JSON file using the CUD
 #### Advanced Usage
 
 ```bash
-docker run --rm --gpus all translator:latest --input-file /path/to/input.json --output-file /path/to/output.json --device cuda --input-language dutch --custom-prompt "Make a haiku from this report in English:"
+docker run --rm --gpus all -v /path/to/local/input:/input -v /path/to/local/output:/output translator:latest --input-file /input/input.json --output-file /output/output.json --device cuda --input-language dutch --custom-prompt "Make a haiku from this report in English:"
+
 ```
 
 This command will translate the reports in the specified JSON file using the CUDA backend, assuming the reports are in Dutch, and save the results to the output file. You can specify a custom_prompt to override the default translation prompt, such as shown above. Adjust the --device, --input-language, and --custom-prompt arguments as needed.
