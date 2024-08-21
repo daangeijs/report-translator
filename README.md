@@ -66,7 +66,7 @@ For users with ARM-based Macs (M1, M2, etc.), I’m aware that the Docker image 
 
 4. **Run the Script**:
     ```bash
-    python translate.py  /path/to/input.json /path/to/output.json --device=gpu 
+    python translator/translate.py  /path/to/input.json /path/to/output.json --device=gpu 
     ```
 
 ### Running the scripts with SLURM
@@ -83,5 +83,5 @@ Here an example on how to load this script on a SLURM cluster using a sbatch scr
 #SBATCH --container-image="your_registery#translate:latest"
 
 # Run the Python script with arguments
-python translate.py /input/demo_input.json /output/output.json
+python translator/translate.py /input/demo_input.json /output/output.json
 ```

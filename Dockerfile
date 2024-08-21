@@ -27,10 +27,10 @@ COPY . .
 ENV PYTHONUNBUFFERED=1
 
 # Download the model within the Conda environment
-RUN conda run --no-capture-output -n translator python download_model.py
+RUN conda run --no-capture-output -n translator python translator/download_model.py
 
 # Set the entry point to use the conda environment and run the script
-ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "translator", "python", "translate.py"]
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "translator", "python", "translator/translate.py"]
 
 # Default command, can be overridden
 CMD ["--help"]
