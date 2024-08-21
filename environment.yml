@@ -1,0 +1,11 @@
+name: translator
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - tqdm
+  - typer
+  - pip:
+      - gpt4all

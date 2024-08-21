@@ -1,35 +1,36 @@
-# Use the official NVIDIA CUDA runtime image
+# Use the official NVIDIA CUDA runtime image with cuDNN 8
 FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
 
-# Set environment variables to force GPU usage
-ENV CUDA_VISIBLE_DEVICES=0
+# Install Miniconda
+RUN apt-get update && apt-get install -y wget && \
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
+    bash Miniconda3-latest-Linux-x86_64.sh -b -p /opt/conda && \
+    rm Miniconda3-latest-Linux-x86_64.sh && \
+    /opt/conda/bin/conda init bash
 
-# Install system dependencies
-RUN apt-get update && \
-    apt-get install -y \
-    python3-pip \
-    openssh-client \
-    wget \
-    unzip \
-    && rm -rf /var/lib/apt/lists/*
+# Set up the environment
+ENV PATH=/opt/conda/bin:$PATH
 
-# Set the working directory in the container
 WORKDIR /usr/src/app
+COPY environment.yml .
+RUN conda env create -f environment.yml
 
-# Copy the requirements file to the container
-COPY requirements.txt ./
+# Activate the conda environment by default
+RUN echo "source activate translator" > ~/.bashrc
+ENV CONDA_DEFAULT_ENV=translator
+ENV PATH /opt/conda/envs/translator/bin:$PATH
 
-# Install Python dependencies
-RUN pip3 install --no-cache-dir -r requirements.txt
-
-# Copy the rest of the application code to the container
+# Copy the application code
 COPY . .
 
-# Run the Python script during the build process to download the model
-RUN python3 download_model.py
+# Set the environment variable to avoid buffering
+ENV PYTHONUNBUFFERED=1
 
-# Run the application with typer
-ENTRYPOINT ["python3", "translate.py"]
+# Download the model within the Conda environment
+RUN conda run --no-capture-output -n translator python download_model.py
 
-# By default, show help when no arguments are passed
+# Set the entry point to use the conda environment and run the script
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "translator", "python", "translate.py"]
+
+# Default command, can be overridden
 CMD ["--help"]

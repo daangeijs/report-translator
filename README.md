@@ -46,3 +46,42 @@ docker run --rm --gpus all -v /path/to/local/input:/input -v /path/to/local/outp
 
 This command will translate the reports in the specified JSON file using the CUDA backend, assuming the reports are in Dutch, and save the results to the output file. You can specify a custom_prompt to override the default translation prompt, such as shown above. Adjust the --device, --input-language, and --custom-prompt arguments as needed.
 
+
+### ARM (macOS M1/M2/M3) Users
+
+For users with ARM-based Macs (M1, M2, etc.), I’m aware that the Docker image might not work smoothly with Metal. Therefore, I recommend running the script locally using Conda. Don't forget to use the `--device=gpu` argument to leverage the Metal backend.
+
+#### Steps to Install Locally:
+
+1. **Install Conda** (e.g., Miniconda or Anaconda).
+2. **Create the Environment**:
+   ```bash
+   conda env create -f environment.yml
+    ```
+
+3. **Activate the Environment**:
+    ```bash
+    conda activate translator
+    ```
+
+4. **Run the Script**:
+    ```bash
+    python translate.py  /path/to/input.json /path/to/output.json --device=gpu 
+    ```
+
+### Running the scripts with SLURM
+Here an example on how to load this script on a SLURM cluster using a sbatch script:
+
+```bash
+#!/bin/bash
+#SBATCH --ntasks=1
+#SBATCH --gpus-per-task=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=8G
+#SBATCH --time=4:00:00
+#SBATCH --container-mounts=/your_input_path:/input,/your_output_path:/output
+#SBATCH --container-image="your_registery#translate:latest"
+
+# Run the Python script with arguments
+python translate.py /input/demo_input.json /output/output.json
+```
