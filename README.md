@@ -1,6 +1,6 @@
 # GPT4All Report Translator
 
-This script translates reports from a specified input language to English using the GPT4All framework and the `Nous-Hermes-2-Mistral-7B-DPO.Q4_0.gguf` model. The input and output are JSON files, and the model can run on different devices.
+This script translates reports from a specified input language to English using the GPT4All framework and the `"Meta-Llama-3-8B-Instruct.Q4_0.gguf"` model. The input and output are JSON files, and the model can run on different devices.
 
 ## Usage
 
