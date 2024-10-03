@@ -38,11 +38,11 @@ def main(input_file: str, output_file: str, device: str = "cuda", input_language
         custom_prompt (str): Optional custom prompt to use instead of the default prompt.
     """
     print("Loading model...")
-    model = GPT4All("Nous-Hermes-2-Mistral-7B-DPO.Q4_0.gguf", model_path='.', device=device)
+    model = GPT4All("Meta-Llama-3-8B-Instruct.Q4_0.gguf", model_path='.', device=device)
     print(f"Model loaded with device: {device} using input language: {input_language}")
     
     # Construct the prompt
-    prompt_base = custom_prompt if custom_prompt else f"Translate this {input_language.capitalize()} report to English:"
+    prompt_base = custom_prompt if custom_prompt else f"Please translate this {input_language.capitalize()} pathology report to english without changing the context or medical diagnosis. Leave everything as it is, dont add notes:"
     
     # Show the user the base prompt that will be used
     print(f"Using prompt: {prompt_base}")
